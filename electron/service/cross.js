@@ -6,6 +6,7 @@ const Log = require('ee-core/log');
 const Ps = require('ee-core/ps');
 const path = require("path");
 const Is = require('ee-core/utils/is');
+const CoreWindow = require('ee-core/electron/window');
 
 /**
  * cross（service层为单例）
@@ -28,17 +29,27 @@ class CrossService extends Service {
 
     // method 2: Use custom configuration
     const serviceName = "go";
+    const configPath = path.join(Ps.getExtraResourcesDir(), 'config.yml');
     const opt = {
       name: 'mayfly-go',
       cmd: path.join(Ps.getExtraResourcesDir(), 'mayfly-go.exe'),
       directory: Ps.getExtraResourcesDir(),
-      args: ['--port=18888', '-server'],
+      port: 18888,
+      args: [ `-e=${configPath}` ],
+      stdio: ['ignore', 'ignore', 'ignore'],
       appExit: true,
     }
     const entity = await Cross.run(serviceName, opt);
     Log.info('server name:', entity.name);
     Log.info('server config:', entity.config);
     Log.info('server url:', Cross.getUrl(entity.name));
+
+    // 
+    Cross.takeover(entity.name);
+
+    // const mainWin = CoreWindow.getMainWindow();
+    // mainWin.show();
+    // mainWin.focus();
 
     return;
   }
