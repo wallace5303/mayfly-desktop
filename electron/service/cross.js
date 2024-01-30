@@ -29,8 +29,11 @@ class CrossService extends Service {
     // method 2: Use custom configuration
     const serviceName = "go";
     const opt = {
-      name: 'goapp',
-      appExit: false,
+      name: 'mayfly-go',
+      cmd: path.join(Ps.getExtraResourcesDir(), 'mayfly-go.exe'),
+      directory: Ps.getExtraResourcesDir(),
+      args: ['--port=18888', '-server'],
+      appExit: true,
     }
     const entity = await Cross.run(serviceName, opt);
     Log.info('server name:', entity.name);

@@ -114,7 +114,7 @@ module.exports = (appInfo) => {
   config.mainServer = {
     protocol: 'file://',
     indexPath: '/public/dist/index.html',
-    takeover: 'go'
+    //takeover: 'go'
   }; 
 
   /**
@@ -124,8 +124,10 @@ module.exports = (appInfo) => {
    */
   config.cross = {
     go: {
-      enable: true,
+      enable: false,
       name: 'mayfly-go',
+      cmd: 'mayfly-go',
+      directory: './',
       args: ['--port=18888'],
       appExit: true,
     },
