@@ -23,7 +23,7 @@ module.exports = (appInfo) => {
    * 主窗口
    */
   config.windowsOption = {
-    title: 'EE框架',
+    title: 'Mayfly',
     width: 980,
     height: 650,
     minWidth: 400,
@@ -49,9 +49,9 @@ module.exports = (appInfo) => {
     buffer: true,
     enablePerformanceTimer: false,
     rotator: 'day',
-    appLogName: 'ee.log',
-    coreLogName: 'ee-core.log',
-    errorLogName: 'ee-error.log' 
+    appLogName: 'mayfly.log',
+    coreLogName: 'mayfly-core.log',
+    errorLogName: 'mayfly-error.log' 
   }
 
   /**
@@ -114,6 +114,7 @@ module.exports = (appInfo) => {
   config.mainServer = {
     protocol: 'file://',
     indexPath: '/public/dist/index.html',
+    takeover: 'go'
   }; 
 
   /**
@@ -123,9 +124,9 @@ module.exports = (appInfo) => {
    */
   config.cross = {
     go: {
-      enable: false,
-      name: 'goapp',
-      args: ['--port=7073'],
+      enable: true,
+      name: 'mayfly-go',
+      args: ['--port=18888'],
       appExit: true,
     },
   };   
@@ -162,7 +163,7 @@ module.exports = (appInfo) => {
     },
     tray: {
       enable: true,
-      title: 'EE程序',
+      title: 'mayfly',
       icon: '/public/images/tray.png'
     },
     security: {
@@ -170,7 +171,7 @@ module.exports = (appInfo) => {
     },
     awaken: {
       enable: true,
-      protocol: 'ee',
+      protocol: 'mayfly',
       args: []
     },
     autoUpdater: {

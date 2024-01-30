@@ -1,7 +1,7 @@
 {
-  "name": "ee",
-  "version": "3.10.0",
-  "description": "A fast, desktop software development framework",
+  "name": "mayfly-desktop",
+  "version": "1.0.0",
+  "description": "A web version of linux, database, redis, mongo unified management operating platform",
   "main": "main.js",
   "scripts": {
     "dev": "ee-bin dev",
@@ -39,11 +39,11 @@
     "build-lp-64": "electron-builder --config=./electron/config/builder.json -l=pacman --x64",
     "test": "set DEBUG=* && electron . --env=local"
   },
-  "repository": "https://github.com/dromara/electron-egg.git",
+  "repository": "https://github.com/wallace5303/mayfly-desktop",
   "keywords": [
-    "Electron",
-    "electron-egg",
-    "ElectronEgg"
+    "mayfly",
+    "mayfly-go",
+    "mayfly-desktop"
   ],
   "author": "哆啦好梦, Inc <530353222@qq.com>",
   "license": "Apache",
