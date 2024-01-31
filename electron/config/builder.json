@@ -1,6 +1,6 @@
 {
-  "productName": "ee",
-  "appId": "com.electron.ee",
+  "productName": "mayfly",
+  "appId": "com.electron.mayfly",
   "copyright": "© 2023 哆啦好梦 Technology Co., Ltd.",
   "directories": {
     "output": "out"
@@ -27,7 +27,7 @@
     "installerHeaderIcon": "build/icons/icon.ico",
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
-    "shortcutName": "EE框架"
+    "shortcutName": "mayfly"
   },
   "mac": {
     "icon": "build/icons/icon.icns",

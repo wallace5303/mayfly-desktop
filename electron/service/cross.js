@@ -5,12 +5,10 @@ const Cross = require('ee-core/cross');
 const Log = require('ee-core/log');
 const Ps = require('ee-core/ps');
 const path = require("path");
-const Is = require('ee-core/utils/is');
 const Helper = require('ee-core/utils/helper');
 const CoreWindow = require('ee-core/electron/window');
 const HttpClient = require('../httpclient');
 const Html = require('../html');
-const fs = require('fs');
 
 /**
  * cross（service层为单例）
