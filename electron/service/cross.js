@@ -7,8 +7,8 @@ const Ps = require('ee-core/ps');
 const path = require("path");
 const Helper = require('ee-core/utils/helper');
 const CoreWindow = require('ee-core/electron/window');
-const HttpClient = require('../httpclient');
-const Html = require('../html');
+const HttpClient = require('ee-core/httpclient');
+const Html = require('ee-core/html');
 
 /**
  * cross（service层为单例）
@@ -42,11 +42,6 @@ class CrossService extends Service {
       appExit: true,
     }
     const entity = await Cross.run(serviceName, opt);
-    Log.info('server name:', entity.name);
-    Log.info('server config:', entity.config);
-    Log.info('server url:', Cross.getUrl(entity.name));
-
-    // 
     this.loadWeb(entity);
 
     return;

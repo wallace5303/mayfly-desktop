@@ -24,8 +24,8 @@ module.exports = (appInfo) => {
    */
   config.windowsOption = {
     title: 'Mayfly',
-    width: 980,
-    height: 650,
+    width: 1280,
+    height: 800,
     minWidth: 400,
     minHeight: 300,
     webPreferences: {
