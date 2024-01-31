@@ -112,9 +112,9 @@ module.exports = (appInfo) => {
    * 主进程
    */     
   config.mainServer = {
-    protocol: 'file://',
-    indexPath: '/public/dist/index.html',
-    //takeover: 'go'
+    protocol: '',
+    // indexPath: '/public/html/index.html',
+    // takeover: 'go'
   }; 
 
   /**

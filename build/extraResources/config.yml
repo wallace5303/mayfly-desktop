@@ -1,7 +1,7 @@
 server:
   # debug release test
   model: release
-  port: 18888
+  port: 7073
   # 上下文路径, 若设置了该值, 则请求地址为ip:port/context-path
   # context-path: /mayfly
   cors: true

@@ -6,7 +6,11 @@ const Log = require('ee-core/log');
 const Ps = require('ee-core/ps');
 const path = require("path");
 const Is = require('ee-core/utils/is');
+const Helper = require('ee-core/utils/helper');
 const CoreWindow = require('ee-core/electron/window');
+const HttpClient = require('../httpclient');
+const Html = require('../html');
+const fs = require('fs');
 
 /**
  * cross（service层为单例）
@@ -34,7 +38,7 @@ class CrossService extends Service {
       name: 'mayfly-go',
       cmd: path.join(Ps.getExtraResourcesDir(), 'mayfly-go.exe'),
       directory: Ps.getExtraResourcesDir(),
-      port: 18888,
+      port: 7073,
       args: [ `-e=${configPath}` ],
       stdio: ['ignore', 'ignore', 'ignore'],
       appExit: true,
@@ -45,43 +49,67 @@ class CrossService extends Service {
     Log.info('server url:', Cross.getUrl(entity.name));
 
     // 
-    Cross.takeover(entity.name);
-
-    // const mainWin = CoreWindow.getMainWindow();
-    // mainWin.show();
-    // mainWin.focus();
+    this.loadWeb(entity);
 
     return;
   }
 
   /**
-   * create java server
+   * load web
    */
-  async createJavaServer() {
-    const serviceName = "java";
-    const jarPath = path.join(Ps.getExtraResourcesDir(), 'java-app.jar');
-    const opt = {
-      name: 'javaapp',
-      cmd: path.join(Ps.getExtraResourcesDir(), 'jre1.8.0_201/bin/javaw.exe'),
-      directory: Ps.getExtraResourcesDir(),
-      args: ['-jar', '-server', '-Xms512M', '-Xmx512M', '-Xss512k', '-Dspring.profiles.active=prod', `-Dserver.port=18080`, `-Dlogging.file.path=${Ps.getLogDir()}`, `${jarPath}`],
-      appExit: false,
-    }
-    if (Is.macOS()) {
-      // Setup Java program
-      opt.cmd = path.join(Ps.getExtraResourcesDir(), 'jre1.8.0_201/Contents/Home/bin/java');
-    }
-    if (Is.linux()) {
-      // Setup Java program
+  async loadWeb(entity, opt = {}) {
+    const cfg = entity.config;
+    const mainWin = CoreWindow.getMainWindow();
+
+    // loading page
+    if (cfg.hasOwnProperty('loadingPage')) {
+      const lp = path.join(Ps.getHomeDir(), cfg.loadingPage);
+      if (Helper.fileIsExist(lp)) {
+        mainWin.loadFile(lp);
+      }
     }
 
-    const entity = await Cross.run(serviceName, opt);
-    Log.info('server name:', entity.name);
-    Log.info('server config:', entity.config);
-    Log.info('server url:', Cross.getUrl(entity.name));
+    const url = entity.getUrl();
+    let count = 0;
+    let serviceReady = false;
+    const hc = new HttpClient();
 
-    return;
-  }  
+    // 循环检查
+    const times = Ps.isDev() ? 20 : 100;
+    const sleeptime = Ps.isDev() ? 1000 : 100;
+    while(!serviceReady && count < times){
+      await Helper.sleep(sleeptime);
+      try {
+        await hc.request(url, {
+          method: 'GET',
+          timeout: 100,
+        });
+        serviceReady = true;
+      } catch(err) {
+        console.log('The cross service is starting');
+      }
+      count++;
+    }
+    console.log('count:', count)
+    if (serviceReady == false) {
+      const failurePage = Html.getFilepath('cross-failure.html');
+      mainWin.loadFile(failurePage);
+      throw new Error(`[ee-core] Please check cross service [${entity.name}] ${url} !`)
+    }
+
+    mainWin.loadURL(url, opt)
+    .then()
+    .catch((err)=>{
+      Log.logger.error(`[ee-core] cross Please check the ${url} !`);
+    });
+    if (!mainWin.isVisible()) {
+      if (mainWin.isMinimized()) {
+        mainWin.restore();
+      }
+      mainWin.show();
+      mainWin.focus();
+    }
+  }   
 }
 
 CrossService.toString = () => '[class CrossService]';
